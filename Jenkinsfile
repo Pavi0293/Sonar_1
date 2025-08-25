@@ -12,12 +12,14 @@
                     }
                 }
             }
-            stage('Quality Gate Check') {
-                steps {
-                    timeout(time: 1, unit: 'HOURS') { // Adjust timeout as needed
-                        waitForQualityGate abortPipeline: true
-                    }
-                }
+           stage('Quality Gate Check') {
+    steps {
+        retry(3) { // Retry the entire block up to 3 times
+            timeout(time: 15, unit: 'MINUTES') { // Keep the timeout
+                waitForQualityGate abortPipeline: true
             }
+        }
+    }
+}
         }
     }
